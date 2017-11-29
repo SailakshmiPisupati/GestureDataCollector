@@ -1,22 +1,39 @@
 package touchdatacollector.mobile.com.touchdatacollector;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.widget.Toast;
+import android.view.View;
+import android.view.WindowManager;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.ScrollView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import java.util.ArrayList;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.Arrays;
 
 /**
  * Created by Saila on 10/24/2017.
@@ -29,29 +46,33 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
     private JSONArray strokeArray = null;
     private int strokeid = 0;
     private int pointid = 0;
-
     // Called when the activity is first created.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-        // Instantiate the gesture detector with the
-        // application context and an implementation of
-        // GestureDetector.OnGestureListener
-        mDetector = new GestureDetectorCompat(this,this);
-        // Set the gesture detector as the double tap
-        // listener.
-        mDetector.setOnDoubleTapListener(this);
-        super.onCreate(savedInstanceState);
-//        GestureOverlayView gestureOverlayView = new GestureOverlayView(this);
-//        View inflate = getLayoutInflater().inflate(R.layout.activity_login, null);
-//        gestureOverlayView.addView(inflate);
-//        gestureOverlayView.addOnGesturePerformedListener(this);
-//        gestureLib = GestureLibraries.fromRawResource(this, R.raw.gestures);
-//        if (!gestureLib.load()) {
-//            finish();
-//        }
-//        setContentView(gestureOverlayView);
+        setContentView(R.layout.scroll_test_layout);
+        ScrollView mScrollView = (ScrollView) findViewById(R.id.scrollView);
+        Button scrollHorizontal = (Button) findViewById(R.id.scrollHorizontalTask);
+        mScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                if(event.getAction() == 0){
+                    strokeArray = new JSONArray();
+                }
+                //sendBroadcast(new Intent("touch_event_has_occured"));
+                collectGestureData(event,strokeArray);  //Data collection function
+                return false;
+            }
+        });
+
+        scrollHorizontal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent scrollHorizontal = new Intent(getApplicationContext(),ScrollHorizontal.class);
+                startActivity(scrollHorizontal);
+            }
+        });
     }
     // This example shows an Activity, but you would use the same approach if
     // you were subclassing a View.
@@ -59,11 +80,12 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
     private MotionEvent lastEvent;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        Log.d(DEBUG_TAG,"onTouchEvent occureed");
         int action = MotionEventCompat.getActionMasked(event);
         if(event.getAction() == 0){
             strokeArray = new JSONArray();
         }
+        //sendBroadcast(new Intent("touch_event_has_occured"));
         collectGestureData(event,strokeArray);  //Data collection function
         return true;
     }
@@ -72,24 +94,33 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
 
         if(ev.getAction() == 0) {                //0 => Action_DOWN (Maintain a property file)
             Log.d(DEBUG_TAG, "Start stroke.");
-            //Creating a JSONObject of all the Strokes
             strokeid++;
+            pointid = 0;
             strokeArray = new JSONArray();
+            strokeArray.put(addStrokeToJSONObject(ev));
         }else if(ev.getAction() == 1){
             Log.d(DEBUG_TAG,"End stroke.");
-            //Creating a JSONObject of the last press.
-            Log.d(DEBUG_TAG,"added JSONArray"+ strokeArray.toString());
+            strokeArray.put(addStrokeToJSONObject(ev));
 
             //Send JSONObject to server
+            sendDataToServer();
         }
+        //Creating a JSONObject of all the Strokes
         strokeArray.put(addStrokeToJSONObject(ev));
-//        final int pointerCount = ev.getPointerCount();
-//        Log.d(DEBUG_TAG,"At time "+ev.getEventTime());
-//        for (int p = 0; p < pointerCount; p++) {
-//            Log.d(DEBUG_TAG, "At time " + ev.getEventTime() + " " + ev.getDeviceId() + " " + ev.getRawX() + " " + ev.getRawY() + " " + ev.getPointerId(p) + " " + ev.getX(p) + " " + ev.getY(p) + " " + ev.getPressure() + " " + ev.getSize() + " " + ev.getAction() + " " + ev.toString());
-//
-//        }
+
         return true;
+    }
+
+    private void sendDataToServer()  {
+        Log.d(DEBUG_TAG,"added JSONArray"+ strokeArray);
+//        JSONObject jsonObject = new JSONObject();
+//        try{
+//            jsonObject.put("data",strokeArray);
+//        }catch(Exception e){
+//            Log.d(DEBUG_TAG,"unable to add JSONArray");
+//        }
+        new SendDataAsyncTask().execute();
+//        new SendDataAsyncTask().execute(strokeArray);
     }
 
     private JSONObject addStrokeToJSONObject(MotionEvent event){
@@ -104,11 +135,66 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
             strokes.put("pressure",event.getPressure());
             strokes.put("size",event.getSize());
             strokes.put("action",event.getAction());
-            strokes.put("gesture","enter the swipe or tap or zoom event");
+//            strokes.put("gesture","calculated at server");
         }catch(JSONException e){
             System.out.print(e);
         }
         return strokes;
+    }
+
+    @Override
+    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+
+    }
+
+    class SendDataAsyncTask extends AsyncTask<Void, String, String>{
+
+        @Override
+//        protected String doInBackground(String... params) {
+        protected String doInBackground(Void... params) {
+
+            Log.d(DEBUG_TAG,"params are:"+ params.toString());
+            URL url = null;
+            HttpURLConnection connection = null;
+            try{
+                url = new URL("http://10.0.2.2:3000/saveData");
+                connection = (HttpURLConnection)url.openConnection();
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(10000);
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+                connection.setChunkedStreamingMode(0);
+                connection.connect();
+                OutputStream os = null;
+                os = new BufferedOutputStream(
+                        connection.getOutputStream());
+                os.write(strokeArray.toString().getBytes());
+                os.flush();// writing your data which you post
+//                Writer writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+//                Log.d(DEBUG_TAG,"SENDING DATA TO URL AS : "+params[0]);
+//                writer.write(params[0]);
+//                writer.close();
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    // OK
+                    Log.d(DEBUG_TAG,"Done ok ");
+                    // otherwise, if any other status code is returned, or no status
+                    // code is returned, do stuff in the else block
+                } else {
+                    Log.d(DEBUG_TAG,"Server returned error. ");
+                    // Server returned HTTP error code.
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(DEBUG_TAG,"Unable to connect to server: ");
+            }finally {
+                connection.disconnect();
+            }
+            return null;
+        }
     }
     @Override
     public boolean onDown(MotionEvent event) {
@@ -163,16 +249,16 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
         return true;
     }
-    private GestureLibrary gestureLib;
-    @Override
-    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-        ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
-        for (Prediction prediction : predictions) {
-            if (prediction.score > 1.0) {
-                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
-    }
+//    private GestureLibrary gestureLib;
+//    @Override
+//    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+//        ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+//        for (Prediction prediction : predictions) {
+//            if (prediction.score > 1.0) {
+//                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT)
+//                        .show();
+//            }
+//        }
+//    }
 
 }

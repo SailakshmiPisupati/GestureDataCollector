@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <HorizontalScrollView
+        android:id="@+id/horiscroll"
+        android:layout_width="match_parent"
+        android:layout_height="434dp">
+
+        <LinearLayout
+            android:id="@+id/mygallery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!--<TextView-->
+                <!--android:id="@+id/hori2"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Hi" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/hori3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="@string/random_text" />-->
+            <!--<TextView-->
+                <!--android:id="@+id/hori1"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="@string/random_text" />-->
+        </LinearLayout>
+
+
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="Scroll to Right to View all Images." />
+
+</LinearLayout>

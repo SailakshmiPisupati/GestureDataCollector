@@ -4,6 +4,7 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
+    <string name="add_overlay">Add Gesture Overlay</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="start_process">Start Process</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -14,4 +15,17 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+    <string name="done_scrolling_button">Done Reading</string>
+    <string name="random_text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras eget purus eget tortor euismod tincidunt. Sed in dui. Quisque facilisis libero eu enim. Aliquam erat volutpat. Nullam non nibh a urna fermentum imperdiet. Pellentesque vitae diam in ipsum tempus interdum. Suspendisse potenti. Sed vestibulum est semper risus. Vestibulum ultricies. Nulla facilisi. In id elit non mauris ornare dictum. Nullam nec metus nec ipsum sodales consectetuer. Curabitur rhoncus. Morbi enim lorem, egestas vel, dictum eu, lacinia vitae, mauris.
+    Curabitur ullamcorper arcu semper leo. Aliquam purus est, auctor nec, aliquam at, dictum quis, velit. Maecenas semper est. Nunc purus. Morbi fermentum. Donec et erat. Vivamus at magna quis lorem feugiat rhoncus. Aenean convallis feugiat ipsum.
+    Curabitur lacinia purus vel risus. Donec sollicitudin iaculis enim. Maecenas semper ligula. Aliquam rutrum, nibh quis adipiscing pulvinar, lectus ligula sagittis velit, nec sollicitudin nibh nulla a odio. Aenean vel pede.
+    Nullam scelerisque diam id dolor. Vivamus est massa, lacinia eu, euismod eget, malesuada semper, arcu. Donec ipsum metus, tempor ac, facilisis non, faucibus vel, magna. Nunc sollicitudin risus in tortor. Mauris nonummy. Fusce vestibulum.
+    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla vel dolor at lorem congue facilisis. In ligula felis, convallis et, congue eget, laoreet vel, sem. Pellentesque faucibus elit eget lacus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Donec sit amet velit. Pellentesque dapibus, nulla ac sodales tempus, sem erat sagittis dui, id tincidunt ante purus in est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum non augue vel justo lacinia blandit. Donec libero. Cras posuere sodales augue. Mauris ultrices. Ut vulputate vestibulum purus.
+    Nulla vitae tortor sit amet diam vehicula vehicula. Morbi wisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vivamus ipsum odio, blandit sit amet, fermentum ut, vestibulum eget, purus. Mauris nec dui. Ut lobortis rhoncus libero. Fusce consequat. Ut semper felis eu urna sodales interdum. Maecenas ut magna. Cras ut ipsum ac est scelerisque posuere. Aliquam mattis. Vestibulum nisl. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Phasellus mollis massa vel felis.
+    Integer nulla libero, iaculis ac, commodo vel, pretium ac, enim. Aenean ut sem. In tristique odio ac ipsum. Nunc elementum. Nulla facilisi. Quisque faucibus, pede vel lacinia varius, lacus diam condimentum massa, quis mollis quam metus et urna. Cras viverra nonummy nibh. Etiam semper. Proin nec orci. Donec velit. Donec volutpat.
+    Duis pulvinar. Proin tempus, erat sit amet laoreet rhoncus, neque dui pretium nunc, sed placerat ante nulla sit amet pede. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Cras laoreet. Vivamus cursus orci semper risus. Fusce semper wisi a ligula imperdiet dignissim. Nulla lacus tortor, elementum et, varius id, aliquam sed, massa. In pellentesque.
+    Sed fringilla, risus sed tristique auctor, est metus imperdiet purus, ut scelerisque sapien leo non odio. Sed vel lectus. Morbi lacinia metus vel urna. In consequat, nisl nec imperdiet sodales, odio nunc sollicitudin sem, a condimentum eros est sit amet orci. Praesent lacinia sagittis risus. Nullam eget eros sit amet lectus ultrices posuere. Suspendisse aliquet ultricies leo. Integer sagittis erat vel leo. Morbi ornare tincidunt pede. Fusce facilisis ipsum vel felis. Ut nibh. Mauris semper auctor turpis. Integer elit velit, consequat at, tempor sit amet, fermentum semper, magna. Nulla justo nulla, tristique ac, elementum semper, nonummy vel, augue. Maecenas velit. Cras quam augue, ullamcorper vel, vestibulum semper, congue sed, eros. Sed nec massa semper risus commodo sodales. Phasellus pulvinar lorem eu lectus. Sed tincidunt, pede quis pretium vehicula, pede nibh sollicitudin augue, et tempus eros massa eu urna.</string>
+
 </resources>
