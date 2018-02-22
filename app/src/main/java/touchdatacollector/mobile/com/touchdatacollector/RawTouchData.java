@@ -1,11 +1,11 @@
 package touchdatacollector.mobile.com.touchdatacollector;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.Gesture;
-import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
-import android.gesture.Prediction;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
@@ -14,26 +14,21 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Arrays;
 
 /**
  * Created by Saila on 10/24/2017.
@@ -46,6 +41,9 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
     private JSONArray strokeArray = null;
     private int strokeid = 0;
     private int pointid = 0;
+    private String gestureType = "Vertical";
+
+    String USERID;
     // Called when the activity is first created.
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +51,10 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
         setContentView(R.layout.scroll_test_layout);
         ScrollView mScrollView = (ScrollView) findViewById(R.id.scrollView);
         Button scrollHorizontal = (Button) findViewById(R.id.scrollHorizontalTask);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.userid), Context.MODE_PRIVATE);
+        TextView userid_tv = (TextView)findViewById(R.id.userid);
+        USERID = sharedPref.getString(getString(R.string.userid),"");
+        userid_tv.setText(USERID);
         mScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -103,7 +105,10 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
             strokeArray.put(addStrokeToJSONObject(ev));
 
             //Send JSONObject to server
-            sendDataToServer();
+//            sendDataToServer();
+
+            DataSender sender = new DataSender();
+            sender.sendDataToServer(strokeArray);
         }
         //Creating a JSONObject of all the Strokes
         strokeArray.put(addStrokeToJSONObject(ev));
@@ -128,14 +133,16 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
         try{
             strokes.put("strokeid",strokeid);
             strokes.put("pointid",pointid++);
-            strokes.put("deviceId",event.getDeviceId());
+            strokes.put("deviceId",Utils.getDeviceID());
             strokes.put("time",event.getEventTime());
             strokes.put("x",event.getX());
             strokes.put("y",event.getY());
             strokes.put("pressure",event.getPressure());
+//            strokes.put("size",event.getSize());
             strokes.put("size",event.getSize());
             strokes.put("action",event.getAction());
-//            strokes.put("gesture","calculated at server");
+            strokes.put("userid",USERID);
+            strokes.put("gesture", gestureType);
         }catch(JSONException e){
             System.out.print(e);
         }
@@ -157,7 +164,10 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
             URL url = null;
             HttpURLConnection connection = null;
             try{
-                url = new URL("http://10.0.2.2:3000/saveData");
+                String IP_address = Utils.getIPADDRESS();
+                String port = Utils.getPortNumber();
+                url = new URL("http://"+IP_address+":"+port+"/saveData");
+//                url = new URL("http://10.0.2.2:3000/saveData");
                 connection = (HttpURLConnection)url.openConnection();
                 connection.setReadTimeout(10000);
                 connection.setConnectTimeout(10000);
@@ -249,16 +259,5 @@ public class RawTouchData extends Activity implements GestureDetector.OnGestureL
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
         return true;
     }
-//    private GestureLibrary gestureLib;
-//    @Override
-//    public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
-//        ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
-//        for (Prediction prediction : predictions) {
-//            if (prediction.score > 1.0) {
-//                Toast.makeText(this, prediction.name, Toast.LENGTH_SHORT)
-//                        .show();
-//            }
-//        }
-//    }
 
 }

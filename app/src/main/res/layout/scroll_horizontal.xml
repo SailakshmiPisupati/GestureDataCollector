@@ -43,4 +43,16 @@
         android:layout_height="38dp"
         android:text="Scroll to Right to View all Images." />
 
+    <Button
+        android:id="@+id/button_horizonal_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish Horizontal Scroll" />
+
+    <Button
+        android:id="@+id/start_pinch_zoom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finish Horizontal Scroll" />
+
 </LinearLayout>

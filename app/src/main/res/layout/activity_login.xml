@@ -13,13 +13,11 @@
 
     <Button
         android:id="@+id/start_process_button"
-        style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/start_process"
-        android:textStyle="bold"
-        android:onClick="buttonClicked"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/scrollHorizontalButton"
@@ -31,13 +29,14 @@
         android:id="@+id/button_add_overlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Adds an Overlay." />
+        android:enabled="true"
+        android:text="Adds an Overlay.[Test]" />
 
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="buttonClicked"
-        android:text="Adds Screen Dimmer" />
+        android:enabled="true"
+        android:text="Adds Screen Dimmer[Test]" />
 
 </LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enrollment for the Touch Data Collector Application."
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <AutoCompleteTextView
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Name" />
+
+    <AutoCompleteTextView
+        android:id="@+id/emailid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email ID" />
+
+    <Spinner
+        android:id="@+id/gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/gender_array"
+        android:prompt="@string/gender"/>
+
+    <Spinner
+        android:id="@+id/dominating_hand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/dominating_hand_array"
+        android:prompt="@string/dominating_hand"/>
+
+    <CheckBox
+        android:id="@+id/terms_and_conditions_checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="I agree to use my data for the experimental purposes." />
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Register and start enrollment" />
+
+    <Button
+        android:id="@+id/start_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not Now. Just Try the App." />
+
+
+</LinearLayout>

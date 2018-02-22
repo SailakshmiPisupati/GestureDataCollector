@@ -1,6 +1,9 @@
 package touchdatacollector.mobile.com.touchdatacollector;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,9 +14,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,12 +36,17 @@ public class ScrollHorizontal extends Activity {
     private static final String DEBUG_TAG = "Gesture";
     private int strokeid = 0;
     private int pointid = 0;
-
+    Button horizontalView;
+    Button pinchZoom;
+    String USERID;
+    String gestureType = "Horizontal";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scroll_horizontal);
         myGallery = (LinearLayout)findViewById(R.id.mygallery);
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.userid), Context.MODE_PRIVATE);
+        USERID = sharedPref.getString(getString(R.string.userid),"");
 
         ArrayList<String> listFile = getAllShownImagesPath(this);
         for(String s :listFile){
@@ -52,6 +63,25 @@ public class ScrollHorizontal extends Activity {
 
                 collectGestureData(event);  //Data collection function
                 return false;
+            }
+        });
+
+
+        horizontalView = (Button)findViewById(R.id.button_horizonal_finish);
+        horizontalView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent zoomView = new Intent(getApplicationContext(),ZoomActivity.class);
+                startActivity(zoomView);
+            }
+        });
+
+        pinchZoom = (Button) findViewById(R.id.start_pinch_zoom);
+        pinchZoom.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent zoomView = new Intent(getApplicationContext(),PinchandZoomActivity.class);
+                startActivity(zoomView);
             }
         });
     }
@@ -82,13 +112,15 @@ public class ScrollHorizontal extends Activity {
         try{
             strokes.put("strokeid",strokeid);
             strokes.put("pointid",pointid++);
-            strokes.put("deviceId",event.getDeviceId());
+            strokes.put("deviceId",Utils.getDeviceID());
             strokes.put("time",event.getEventTime());
             strokes.put("x",event.getX());
             strokes.put("y",event.getY());
             strokes.put("pressure",event.getPressure());
             strokes.put("size",event.getSize());
             strokes.put("action",event.getAction());
+            strokes.put("userid",USERID);
+            strokes.put("gesture", gestureType);
 //            strokes.put("gesture","calculated at server");
         }catch(JSONException e){
             System.out.print(e);

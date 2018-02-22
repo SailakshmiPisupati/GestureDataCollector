@@ -101,14 +101,16 @@ public class LoginActivity extends Activity  implements LoaderCallbacks<Cursor> 
                 }
                 case R.id.button_add_overlay: {
                     Log.d(TAG, "Adding overlay. calling method");
-                    addWindowOverlay();
+                    Intent scrollHorizontal = new Intent(getApplicationContext(),PinchandZoomActivity.class);
+                    startActivity(scrollHorizontal);
+//                    addWindowOverlay();
                     break;
                 }
 
                 case R.id.button: {
                     Log.d(TAG, "Adding overlay. calling button");
-//                    Intent screenDimmerIntent = new Intent(getApplicationContext(),ScreenDimmer.class);
-//                    startService(screenDimmerIntent);
+                    Intent screenDimmerIntent = new Intent(getApplicationContext(),ScreenDimmer.class);
+                    startService(screenDimmerIntent);
                     IntentFilter filter = new IntentFilter();
                     TouchReceiver touchReceiver = new TouchReceiver();
                     registerReceiver(touchReceiver,filter);
@@ -165,15 +167,15 @@ public class LoginActivity extends Activity  implements LoaderCallbacks<Cursor> 
 //        filter.addAction(getTitle()+"Touch occured");
     }
 
-    private void addWindowOverlay() {
-        //code to add a Window Overlay on top for all screens.
-        Log.i(TAG, "Adding overlay. inside method");
-//        Intent intent = new Intent(this, WindowAddOverlay.class);
-        //startActivity(intent);
-
-        Intent startOverlay = new Intent(LoginActivity.this, HUD.class);
-        startService(startOverlay);
-    }
+//    private void addWindowOverlay() {
+//        //code to add a Window Overlay on top for all screens.
+//        Log.i(TAG, "Adding overlay. inside method");
+////        Intent intent = new Intent(this, WindowAddOverlay.class);
+//        //startActivity(intent);
+//
+////        Intent startOverlay = new Intent(LoginActivity.this, HUD.class);
+////        startService(startOverlay);
+//    }
 
 
     /**

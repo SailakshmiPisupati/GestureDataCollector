@@ -80,7 +80,10 @@ public class DataSender {
             URL url = null;
             HttpURLConnection connection = null;
             try{
-                url = new URL("http://10.0.2.2:3000/saveData");
+                String IP_address = Utils.getIPADDRESS();
+                String port = Utils.getPortNumber();
+                url = new URL("http://"+IP_address+":"+port+"/saveData");
+//                url = new URL("http://10.0.2.2:3000/saveData");
                 connection = (HttpURLConnection)url.openConnection();
                 connection.setReadTimeout(10000);
                 connection.setConnectTimeout(10000);
@@ -94,7 +97,10 @@ public class DataSender {
                 writer.close();
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     // OK
-                    Log.d(DEBUG_TAG,"Done ok ");
+//                    JSONObject json = (JSONObject) connection.getContent();
+
+                    Log.d(DEBUG_TAG,"Done ok");
+
                     // otherwise, if any other status code is returned, or no status
                     // code is returned, do stuff in the else block
                 } else {
@@ -113,6 +119,7 @@ public class DataSender {
             }
             return null;
         }
+
 
     }
 }
